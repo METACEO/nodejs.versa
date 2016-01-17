@@ -3,14 +3,16 @@
 var CRYPTO = require('crypto');
 
 function VersaApi(
-  options
+  opts
 ){
   
-  if(!(this instanceof VersaApi)) return new VersaApi(options);
+  if(!(this instanceof VersaApi)) return new VersaApi(opts);
   
-  options        = (typeof options === 'object')             ? options                  : {};
-  this.algorithm = (typeof options.algorithm === 'string')   ? options.algorithm        : 'aes256';
-  this.password  = (typeof options.password === 'undefined') ? CRYPTO.randomBytes(2048) : options.password;
+  opts           = (typeof opts === 'object')             ? opts                          : {};
+  this.size      = (typeof opts.size === 'number')        ? opts.size                     : 2048;
+  this.size      = (this.size >= 16)                      ? Math.floor(this.size)         : 16;
+  this.algorithm = (typeof opts.algorithm === 'string')   ? opts.algorithm                : 'aes256';
+  this.password  = (typeof opts.password === 'undefined') ? CRYPTO.randomBytes(opts.size) : opts.password;
   
   return this;
 }

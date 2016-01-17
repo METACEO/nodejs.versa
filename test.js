@@ -5,7 +5,7 @@ var VERSA = require('./');
 var plainFile     = './Versa.test.file';
 var encryptedFile = './Versa.test.file.encrypted';
 
-var profile  = {'algorithm':'aes256','password':'profileA\'s password'};
+var profile  = {'size':2048,'algorithm':'aes256','password':'profileA\'s password'};
 var profileA = VERSA(profile);
 var profileB = VERSA(profile);
 
@@ -19,7 +19,7 @@ FS.createReadStream(plainFile)
   
   var decrypted = "";
   
-  if(FS.readFileSync(encryptedFile,'base64') !== 'QSeKGw7GUmPecH+hrZJpYIuQgt160+/jPnWE0FkgiDPmDqLXKTjj7gfu021l7qcirE7/ub+8Dgr0k//Zm4xP1g==') throw new Error('Pipe encryption mismatches!.');
+  if(FS.readFileSync(encryptedFile,'base64') !== 'j0+wkIXwtK7BYErIUmUO/QOlsYzZ9HQmOwJ8OkP3WEH+FV8SKJa5nkpbxaZvfuTwDVGPr5tHniSalSSzZa/9f9dSqmEFZGBRYk4/SOrdsBQ=') throw new Error('Pipe encryption mismatches!.');
   
   console.log('Pipe encryption matches!');
   

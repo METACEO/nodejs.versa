@@ -1,0 +1,44 @@
+{
+  "name": "versa",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=0.12.x"
+  },
+  "description": "Module to provide encryption/decryption profiles.",
+  "main": "./api.js",
+  "scripts": {
+    "test": "node ./test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/metaceo/nodejs.versa.git"
+  },
+  "keywords": [
+    "api",
+    "cipher",
+    "crypto",
+    "data",
+    "decipher",
+    "decrypt",
+    "encrypt",
+    "json",
+    "profile",
+    "resources"
+  ],
+  "bin": {},
+  "author": {
+    "name": "James Allen",
+    "email": "com.npmjs@meta.ceo",
+    "url": "https://github.com/metaceo"
+  },
+  "contributors": [],
+  "license": "MIT",
+  "preferGlobal": false,
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "bugs": {
+    "url": "https://github.com/metaceo/nodejs.versa/issues"
+  },
+  "homepage": "https://github.com/metaceo/nodejs.versa#readme"
+}

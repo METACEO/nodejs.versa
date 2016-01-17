@@ -5,7 +5,7 @@ var VERSA = require('./');
 var plainFile     = './Versa.test.file';
 var encryptedFile = './Versa.test.file.encrypted';
 
-var profile  = {'size':2048,'algorithm':'aes256','password':'profileA\'s password'};
+var profile  = {'algorithm':'aes256','password':'profileA\'s password','size':2048};
 var profileA = VERSA(profile);
 var profileB = VERSA(profile);
 
@@ -19,7 +19,7 @@ FS.createReadStream(plainFile)
   
   var decrypted = "";
   
-  if(FS.readFileSync(encryptedFile,'base64') !== 'j0+wkIXwtK7BYErIUmUO/QOlsYzZ9HQmOwJ8OkP3WEH+FV8SKJa5nkpbxaZvfuTwDVGPr5tHniSalSSzZa/9f9dSqmEFZGBRYk4/SOrdsBQ=') throw new Error('Pipe encryption mismatches!.');
+  if(FS.readFileSync(encryptedFile,'base64') !== 'QSeKGw7GUmPecH+hrZJpYIuQgt160+/jPnWE0FkgiDPmDqLXKTjj7gfu021l7qciWc6yA9EPDIGzZVL3mPJ0n7fB0EHur02vKLmJyYkDp+Q=') throw new Error('Pipe encryption mismatches!.');
   
   console.log('Pipe encryption matches!');
   
@@ -29,13 +29,17 @@ FS.createReadStream(plainFile)
   .on('data',function(data){ decrypted += data.toString('binary'); })
   .on('finish',function(){
     
-    if(decrypted !== JSON.stringify(profileA)) throw new Error('ProfileA mismatches!');
+    if(decrypted !== profileA.json()) throw new Error('ProfileA mismatches!');
     
     console.log('ProfileA matches!');
     
-    if(decrypted !== JSON.stringify(profileB)) throw new Error('ProfileB mismatches!');
+    if(decrypted !== profileB.json()) throw new Error('ProfileB mismatches!');
     
     console.log('ProfileB matches!');
+    
+    if(JSON.stringify(profileA.profile()) !== JSON.stringify(profileB.profile())) throw new Error('Profile mismatches!');
+    
+    console.log('Profiles match!');
     
     FS.unlinkSync(plainFile);
     FS.unlinkSync(encryptedFile);

@@ -76,6 +76,6 @@ FS.createReadStream("LICENSE")
 .pipe(FS.createWriteStream("LICENSE.encrypted"))
 .on("finish",function(){
   
-  FS.writeFileSync("LICENSE.encrypted.profile",JSON.stringify(resource));
+  FS.writeFileSync("LICENSE.encrypted.profile",resource.json());
 });
 ```

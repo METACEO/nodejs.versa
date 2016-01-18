@@ -5,6 +5,17 @@ var VERSA = require('./');
 var plainFile     = './Versa.test.file';
 var encryptedFile = './Versa.test.file.encrypted';
 
+function throwError(
+  message
+){
+  
+  throw new Error((Array.isArray(message)) ? message.join('\n') : message);
+  
+  process.exit(1);
+}
+
+if(typeof Buffer.isBuffer !== 'function') throwError('Buffer.isBuffer is not a function!');
+
 var profile  = {'algorithm':'aes256','password':'profileA\'s password','size':2048};
 var profileA = VERSA(profile);
 var profileB = VERSA(profile);
@@ -12,32 +23,32 @@ var profileB = VERSA(profile);
 FS.writeFileSync(plainFile,JSON.stringify(profile));
 
 FS.createReadStream(plainFile)
-.on('error',function(error){ throw new Error(error); })
+.on('error',throwError)
 .pipe(profileA.encrypt())
 .pipe(FS.createWriteStream(encryptedFile))
 .on('finish',function(){
   
   var decrypted = "";
   
-  if(FS.readFileSync(encryptedFile,'base64') !== 'QSeKGw7GUmPecH+hrZJpYIuQgt160+/jPnWE0FkgiDPmDqLXKTjj7gfu021l7qciWc6yA9EPDIGzZVL3mPJ0n7fB0EHur02vKLmJyYkDp+Q=') throw new Error('Pipe encryption mismatches!.');
+  if(FS.readFileSync(encryptedFile,'base64') !== 'QSeKGw7GUmPecH+hrZJpYIuQgt160+/jPnWE0FkgiDPmDqLXKTjj7gfu021l7qciWc6yA9EPDIGzZVL3mPJ0n7fB0EHur02vKLmJyYkDp+Q=') throwError('Pipe encryption mismatches!');
   
   console.log('Pipe encryption matches!');
   
   FS.createReadStream(encryptedFile)
-  .on('error',function(error){ throw new Error(error); })
+  .on('error',throwError)
   .pipe(profileB.decrypt())
   .on('data',function(data){ decrypted += data.toString('binary'); })
   .on('finish',function(){
     
-    if(decrypted !== profileA.json()) throw new Error('ProfileA mismatches!');
+    if(decrypted !== profileA.json()) throwError('ProfileA mismatches!');
     
     console.log('ProfileA matches!');
     
-    if(decrypted !== profileB.json()) throw new Error('ProfileB mismatches!');
+    if(decrypted !== profileB.json()) throwError('ProfileB mismatches!');
     
     console.log('ProfileB matches!');
     
-    if(JSON.stringify(profileA.profile()) !== JSON.stringify(profileB.profile())) throw new Error('Profile mismatches!');
+    if(JSON.stringify(profileA.profile()) !== JSON.stringify(profileB.profile())) throwError('Profile mismatches!');
     
     console.log('Profiles match!');
     

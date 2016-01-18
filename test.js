@@ -1,7 +1,8 @@
 'use strict';
 
-var FS    = require('fs');
-var VERSA = require('./');
+var CRYPTO = require('crypto');
+var FS     = require('fs');
+var VERSA  = require('./');
 var plainFile     = './Versa.test.file';
 var encryptedFile = './Versa.test.file.encrypted';
 
@@ -19,6 +20,7 @@ if(typeof Buffer.isBuffer !== 'function') throwError('Buffer.isBuffer is not a f
 var profile  = {'algorithm':'aes256','password':'profileA\'s password','size':2048};
 var profileA = VERSA(profile);
 var profileB = VERSA(profile);
+var profileC = VERSA();
 
 FS.writeFileSync(plainFile,JSON.stringify(profile));
 
@@ -50,7 +52,27 @@ FS.createReadStream(plainFile)
     
     if(JSON.stringify(profileA.profile()) !== JSON.stringify(profileB.profile())) throwError('Profile mismatches!');
     
-    console.log('Profiles match!');
+    console.log('Profiles matches!');
+    
+    var testBuffer  = CRYPTO.randomBytes(1024);
+    var testEncrypt = profileC.encrypt(testBuffer);
+    var testHide    = profileC.hide(testBuffer);
+    
+    if(testEncrypt.length !== 1040) throwError('ProfileC encrypt mismatch!');
+    
+    console.log('ProfileC encrypt matches!');
+    
+    if(testHide.length !== 1552) throwError('ProfileC hide mismatch!');
+    
+    console.log('ProfileC hide matches!');
+    
+    if(!(testBuffer.equals(profileC.decrypt(testEncrypt)))) throwError('ProfileC decrypt mismatch!');
+    
+    console.log('ProfileC decrypt matches!');
+    
+    if(!(testBuffer.equals(profileC.show(testHide)))) throwError('ProfileC show mismatch!');
+    
+    console.log('ProfileC show matches!');
     
     FS.unlinkSync(plainFile);
     FS.unlinkSync(encryptedFile);

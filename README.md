@@ -13,7 +13,8 @@ npm install versa
 
 ### Programmatically
 
-**Encryption/Decryption Profiles**
+**Encryption/Decryption Profile Examples**
+
 ```javascript
 var Versa = require("versa");
 
@@ -63,7 +64,45 @@ console.log(new Versa({"password":{"type":"Buffer","data":[109,121,32,97]}}));
 //   password: <Buffer 6d 79 20 61 > }
 ```
 
-**Pipe Example**
+**Padding Examples**
+
+```javascript
+var Versa = require("versa");
+
+/* Using modulus, further obscure your encrypted
+// payloads by increasing their byte lengths toward
+// an incremented amount. Versa will serialize your
+// message within a larger-looking payload of junk
+// bytes from Crypto's randomBytes method. When
+// decrypting, Versa will parse out and return your
+// orignal message. Becuase of the serialization and
+// parsing approaches, Versa will only decrypt it's
+// own encrypted payloads.
+*/
+
+var note    = new Versa();
+var message = "Hey!.. here's some information!";
+
+var encrypted = note.encrypt(message);
+// This results with a 32-bit encrypted buffer. While
+// it is encrypted, it can be guessed that the message
+// is small.
+//   <Buffer f6 aa 95 19 ... >
+
+var hidden = note.hide(message);
+// This results with a 528-bit encrypted buffer. Unlike
+// 'encrypted' above, it eliminates the ability to guess
+// the size or scale of the original message.
+//   <Buffer 3d 7f 2a 7a ... >
+
+console.log('%s',note.decrypt(encrypted)); // Hey!.. here's some information!
+console.log('%s',note.show(hidden));       // Hey!.. here's some information!
+// Both the above decrypt back to the original message,
+// but by "hiding" the message, the two instead look
+// unrelated.
+```
+
+**Pipe Examples**
 
 ```javascript
 var FS       = require("fs");

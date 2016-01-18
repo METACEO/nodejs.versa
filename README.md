@@ -75,7 +75,7 @@ var Versa = require("versa");
 // message within a larger-looking payload of junk
 // bytes from Crypto's randomBytes method. When
 // decrypting, Versa will parse out and return your
-// orignal message. Becuase of the serialization and
+// original message. Because of the serialization and
 // parsing approaches, Versa will only decrypt it's
 // own encrypted payloads.
 */

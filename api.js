@@ -104,7 +104,7 @@ function VersaApi(
   ){
     
     var bytes;
-    var index;
+    var index = 0;
     
     if(
       typeof data === 'string'
@@ -114,8 +114,10 @@ function VersaApi(
       VersaApiIsBuffer(data)
     ){
       
-      data  = self.decrypt((VersaApiIsBuffer(data)) ? data.data : data);
-      index = data.indexOf("#");
+      data = self.decrypt((VersaApiIsBuffer(data)) ? data.data : data);
+      
+      while(data.toString('utf-8',index,(index + 1)) !== "#") index++;
+      
       bytes = parseFloat(data.slice(0,index));
       
       index++;

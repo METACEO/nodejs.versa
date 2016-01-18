@@ -13,7 +13,7 @@ function VersaApi(
   self.size      = (typeof opts.size === 'number')        ? opts.size                     : 2048;
   self.size      = (self.size >= 16)                      ? Math.floor(self.size)         : 16;
   self.algorithm = (typeof opts.algorithm === 'string')   ? opts.algorithm                : 'aes256';
-  self.password  = (typeof opts.password === 'undefined') ? CRYPTO.randomBytes(opts.size) : opts.password;
+  self.password  = (typeof opts.password === 'undefined') ? CRYPTO.randomBytes(self.size) : opts.password;
   
   self.decrypt = function VersaApiDecrypt(
   ){

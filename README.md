@@ -37,20 +37,30 @@ console.log(new Versa({"algorithm":"aes128"}));
 // { algorithm: 'aes128',
 //   password: <Buffer f5 d4 01 97 ... > }
 
-console.log(new Versa({"algorithm":"aes128","size":1337}));
-// AES128 with 1337-bit password:
-// { algorithm: 'aes128',
+console.log(new Versa({"size":1337}));
+// AES256 with 1337-bit password:
+// { algorithm: 'aes256',
 //   password: <Buffer 28 cf 03 6b ... > }
 
-console.log(new Versa({"algorithm":"aes128","size":15}));
-// AES128 with 16-bit password:
-// { algorithm: 'aes128',
-//   password: <Buffer 28 cf 03 6b ... > }
+console.log(new Versa({"size":15}));
+// AES256 with 16-bit password:
+// { algorithm: 'aes256',
+//   password: <Buffer bc 99 fa 4b ... > }
 
 console.log(new Versa({"password":"my application's secret code"}));
 // AES256 with a String password:
 // { algorithm: 'aes256',
 //   password: 'my application\'s secret code' }
+
+console.log(new Versa({"password":new Buffer("my application's secret code")}));
+// AES256 with a Buffer password:
+// { algorithm: 'aes256',
+//   password: <Buffer 6d 79 20 61 ... > }
+
+console.log(new Versa({"password":{"type":"Buffer","data":[109,121,32,97]}}));
+// AES256 with a JSON-parsed Buffer password:
+// { algorithm: 'aes256',
+//   password: <Buffer 6d 79 20 61 > }
 ```
 
 **Pipe Example**

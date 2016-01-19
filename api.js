@@ -94,6 +94,7 @@ function VersaApi(
     
     return {
       'algorithm': self.algorithm,
+      'padding': self.padding,
       'password': self.password,
       'size': self.size
     };

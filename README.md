@@ -106,16 +106,16 @@ console.log('%s',note.show(hidden));       // Hey!.. here's some information!
 
 ```javascript
 var FS       = require("fs");
-var Versa    = require("versa");
+var Versa    = require("./");
 var resource = new Versa();
 
 /* Here's a simple pipe example, something like
 // you'd use with the native Crypto module. Once
 // the pipe is done, we save the encryption/
 // decryption profile. We won't worry about the
-// password used to encrypt/decrypt, we backup
-// it and its algorithm up somewhere where we
-// can access later. This example writes the
+// password used to encrypt/decrypt, we back it
+// and its algorithm up somewhere where we can
+// access them later. This example writes the
 // profile locally (alongside the encrypted file)
 // but you can save it wherever is secure for
 // you and your application.
@@ -126,5 +126,28 @@ FS.createReadStream("LICENSE")
 .on("finish",function(){
   
   FS.writeFileSync("LICENSE.encrypted.profile",resource.json());
+  
+  console.log("Encrypted!");
+  
+  /* We'll simulate, as in some other application,
+  // loading the profile of what we encrypted the
+  // license with to decrypt it back. In most cases,
+  // if not all, our profile won't be alongside our
+  // plaintext or encrypted file, imagine we've
+  // loaded back our profile and we need the license
+  // next.
+  */
+  FS.createReadStream("LICENSE.encrypted")
+  .pipe(new Versa(JSON.parse(FS.readFileSync("LICENSE.encrypted.profile"))).decrypt())
+  .pipe(FS.createWriteStream("LICENSE.decrypted"))
+  .on("finish",function(){
+    
+    console.log("Decrypted!");
+    
+    FS.unlinkSync("LICENSE.encrypted");
+    FS.unlinkSync("LICENSE.encrypted.profile");
+    
+    console.log("Cleaned up!");
+  });
 });
 ```

@@ -66,7 +66,7 @@ function VersaApi(
   ){
     
     var bytes;
-    var padding = (self.padding > 0) ? self.padding : 256;
+    var padding = (self.padding > 0) ? self.padding : 512;
     
     if(
       typeof data === 'string'

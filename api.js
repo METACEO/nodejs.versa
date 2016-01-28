@@ -14,7 +14,7 @@ function VersaApi(
   self.padding   = (self.padding >= 1)                  ? Math.floor(self.padding) : 0;
   self.size      = (typeof opts.size === 'number')      ? opts.size                : 2048;
   self.size      = (self.size >= 16)                    ? Math.floor(self.size)    : 16;
-  self.algorithm = (typeof opts.algorithm === 'string') ? opts.algorithm           : 'aes256';
+  self.algorithm = (typeof opts.algorithm === 'string') ? opts.algorithm           : 'aes-256-cbc';
   VersaApiPassword.call(self,opts);
   
   self.decrypt = function VersaApiDecrypt(
@@ -66,7 +66,7 @@ function VersaApi(
   ){
     
     var bytes;
-    var padding = (self.padding > 0) ? self.padding : Math.round(Math.random()*512) + 1;
+    var padding = (self.padding > 0) ? self.padding : 256;
     
     if(
       typeof data === 'string'

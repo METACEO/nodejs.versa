@@ -17,7 +17,7 @@ function throwError(
 
 if(typeof Buffer.isBuffer !== 'function') throwError('Buffer.isBuffer is not a function!');
 
-var profile  = {"algorithm":"aes256","padding":512,"password":"profileA's password","size":2048};
+var profile  = {"algorithm":"aes-256-cbc","padding":512,"password":"profileA's password","size":2048};
 var profileA = VERSA(profile);
 var profileB = VERSA(profile);
 var profileC = VERSA();
@@ -32,7 +32,7 @@ FS.createReadStream(plainFile)
   
   var decrypted = "";
   
-  if(FS.readFileSync(encryptedFile,'base64') !== 'QSeKGw7GUmPecH+hrZJpYAs6jCTj5BBNoSPzUBXyRXiycC3Z6lMtC+Yc3mxijNBT1sWDzTuF/Kx1OOzEeYeJCS5tcIeQM/VkZSzaR1o8R+Yy90GGyDsr5QcUO2sCf0k/') throwError('Pipe encryption mismatches!');
+  if(FS.readFileSync(encryptedFile,'base64') !== 'QSeKGw7GUmPecH+hrZJpYFIrWC+zUcV/A/c/esLwJoIJ865bK1byWEb1jM4vJ+uKY5HEwPQi05HOPPWBa2TKah32Z0z86ZnB9CbGbDusbovow/wO4ca18ta+cW8c+5Fr') throwError('Pipe encryption mismatches!');
   
   console.log('Pipe encryption matches!');
   

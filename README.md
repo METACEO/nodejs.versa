@@ -5,6 +5,8 @@
 [![Build Status](https://travis-ci.org/METACEO/nodejs.versa.svg)](https://travis-ci.org/METACEO/nodejs.versa)
 [![Dependency Status](https://david-dm.org/metaceo/nodejs.versa.svg)](https://david-dm.org/metaceo/nodejs.versa)
 
+### \*\*\* *Still awaiting a third-party audit!* \*\*\*
+
 ```
 npm install versa
 ```

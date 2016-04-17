@@ -9,12 +9,16 @@ function VersaApi(
   if(!(this instanceof VersaApi)) return new VersaApi(opts);
   
   var self = this;
-  opts           = (typeof opts === 'object')           ? opts                     : {};
-  self.padding   = (typeof opts.padding === 'number')   ? opts.padding             : 512;
-  self.padding   = (self.padding >= 1)                  ? Math.floor(self.padding) : 0;
-  self.size      = (typeof opts.size === 'number')      ? opts.size                : 2048;
-  self.size      = (self.size >= 16)                    ? Math.floor(self.size)    : 16;
-  self.algorithm = (typeof opts.algorithm === 'string') ? opts.algorithm           : 'aes-256-cbc';
+  /* Dereference and free our `opts`
+  // argument before being bound and
+  // passed around (Number, substring.)
+  */
+  opts           = (typeof opts === 'object')           ? opts                        : {};
+  self.padding   = (typeof opts.padding === 'number')   ? Number(opts.padding)        : 512;
+  self.padding   = (self.padding >= 1)                  ? Math.floor(self.padding)    : 0;
+  self.size      = (typeof opts.size === 'number')      ? Number(opts.size)           : 2048;
+  self.size      = (self.size >= 16)                    ? Math.floor(self.size)       : 16;
+  self.algorithm = (typeof opts.algorithm === 'string') ? opts.algorithm.substring(0) : 'aes-256-cbc';
   VersaApiPassword.call(self,opts);
   
   self.decrypt = function VersaApiDecrypt(
@@ -67,16 +71,21 @@ function VersaApi(
     
     var bytes;
     var padding = (self.padding > 0) ? self.padding : 512;
+    var isVersaBuffer = false;
     
     if(
       typeof data === 'string'
       ||
       Buffer.isBuffer(data)
       ||
-      VersaApiIsBuffer(data)
+      (
+        (isVersaBuffer = VersaApiIsBuffer(data))
+        &&
+        isVersaBuffer === true
+      )
     ){
       
-      data    = new Buffer((VersaApiIsBuffer(data)) ? data.data : data);
+      data    = new Buffer(isVersaBuffer ? data.data : data);
       bytes   = new Buffer(data.length.toString() + "#");
       padding = new Buffer(CRYPTO.randomBytes((padding - ((data.length + bytes.length) % padding))))
       
@@ -106,16 +115,21 @@ function VersaApi(
     
     var bytes;
     var index = 0;
+    var isVersaBuffer = false;
     
     if(
       typeof data === 'string'
       ||
       Buffer.isBuffer(data)
       ||
-      VersaApiIsBuffer(data)
+      (
+        (isVersaBuffer = VersaApiIsBuffer(data))
+        &&
+        isVersaBuffer === true
+      )
     ){
       
-      data = self.decrypt((VersaApiIsBuffer(data)) ? data.data : data);
+      data = self.decrypt(isVersaBuffer ? data.data : data);
       
       while(data.toString('utf-8',index,(index + 1)) !== "#") index++;
       
